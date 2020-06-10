@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1584981655532.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1967088926",
+    "id" : "83E5FDE7",
+    "lastKnownWriteTime" : 1584985318,
+    "last_content_update" : 1584985318899,
+    "path" : "~/OneDrive/Documents/Writing/PR4/Chapter 5 Code/rmarkdown-demo/testdocument.Rmd",
+    "project_path" : "testdocument.Rmd",
+    "properties" : {
+        "cursorPosition" : "6,0",
+        "scrollLine" : "1",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

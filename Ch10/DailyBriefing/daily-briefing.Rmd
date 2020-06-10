@@ -1,0 +1,48 @@
+---
+title: "Daily Briefing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+load("daily-brief")
+```
+
+## `r format(Sys.time(),'%a %b %d %Y')`
+
+Welcome to your daily briefing. Today the high temperature will be `r round(weather$main$temp,digits=0)` degrees and `r weather$weather$main`.
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+kable(events[c(1,2,3,5)], caption="Your Schedule")
+```
+
+In world news, the top 5 headlines and their sources are:
+```{r echo=FALSE, results='asis'}
+cat(paste(
+  '<ul><li><a href=',
+  news.df$articles$url[1],'>',
+  news.df$articles$title[1],'</a></li><li><a href=',
+  news.df$articles$url[2],'>',
+  news.df$articles$title[2],'</a></li><li><a href=',
+    news.df$articles$url[3],'>',
+  news.df$articles$title[3],'</a></li><li><a href=',
+    news.df$articles$url[4],'>',
+  news.df$articles$title[4],'</a></li><li><a href=',
+  news.df$articles$url[5],'>',
+  news.df$articles$title[5],'</a></li></ul>'))
+
+```
+
+Here are your stock quotes from the last trading day:
+```{r echo=FALSE, results='asis'}
+stocks <- rbind(dji,aapl,goog)
+kable(stocks)
+```
+
+
+
+Finally, to wrap up your briefing, today's inspirational quote:
+
+>`r quote.df$contents$quotes$quote` -*`r quote.df$contents$quotes$author`*
+

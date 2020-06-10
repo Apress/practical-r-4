@@ -1,0 +1,27 @@
+data <- read.csv(file="pr4.csv");
+library("lme4");
+mouseover <- subset(data,event=="mouseover");
+mouseover <- subset(mouseover,name!="catbtn");
+mouseover <- subset(mouseover,name!="dogbtn");
+mouseover$time.c <- mouseover$time - mean(mouseover$time);
+mouseover$time.c.scaled <- mouseover$time.c / 250;
+fit <- glmer(choice=="catbtn" ~ (1|id) + time.c.scaled%in%value,data=mouseover,family=binomial);
+summary(fit);
+
+#library("reshape2");
+#melted <- melt(data,id.vars=c("id","choice","expname","ip","condnum","submitted","mlchoice"))
+
+summary(mouseover);
+sd(mouseover$time);
+outlier <- mean(mouseover$time) + (sd(mouseover$time));
+## Remove Outliers (mean + 2 SD)
+mouseover <- subset(mouseover,time < outlier);
+
+
+data$t_con1.c <- data$t_con1 - mean(data$t_con1)
+data$t_con2.c <- data$t_con2 - mean(data$t_con2)
+data$t_con3.c <- data$t_con3 - mean(data$t_con3)
+data$t_pro1.c <- data$t_pro1 - mean(data$t_pro1)
+data$t_pro2.c <- data$t_pro2 - mean(data$t_pro2)
+data$t_pro3.c <- data$t_pro3 - mean(data$t_pro3)
+fit <- glmer(mlchoice ~ (1|id) + t_con1.c + t_con2.c + t_con3.c + t_pro1.c + t_pro2.c + t_pro3.c, data=data, family=binomial);

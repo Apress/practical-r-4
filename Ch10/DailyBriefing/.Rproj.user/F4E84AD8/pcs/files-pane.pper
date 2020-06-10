@@ -1,0 +1,13 @@
+{
+    "path" : "~/OneDrive/Documents/Writing/PR4/Chapter 10 Resources/DailyBriefing",
+    "sortOrder" : [
+        {
+            "ascending" : false,
+            "columnIndex" : 4
+        },
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

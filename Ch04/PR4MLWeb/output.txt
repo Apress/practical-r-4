@@ -1,0 +1,201 @@
+> library("lme4");
+Loading required package: Matrix
+> library("lmerTest");
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+> library("psych");
+> library("reshape2");
+> data <- read.csv(file="pr4example_proc.csv");
+> ## Some basic descriptive statistics
+> table(data$boxname)
+
+catbtn   con1   con2   con3 dogbtn   pro1   pro2   pro3
+    20     28     28     29     17     14     26     33
+> by(data$boxtime,data$boxname,describe)
+data$boxname: catbtn
+   vars  n  mean     sd median trimmed    mad min max range skew kurtosis    se
+X1    1 20 365.8 119.27    330  357.31 111.19 188 685   497 0.78     0.28 26.67
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: con1
+   vars  n    mean      sd median trimmed    mad min  max range skew kurtosis     se
+X1    1 28 1146.39 1155.77  563.5  969.88 444.78 227 5658  5431 2.15      5.6 218.42
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: con2
+   vars  n    mean     sd median trimmed    mad min  max range skew kurtosis  se
+X1    1 28 1059.96 799.03    754     990 684.96 282 3094  2812 0.65    -0.73 151
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: con3
+   vars  n    mean      sd median trimmed   mad min  max range skew kurtosis     se
+X1    1 29 1680.83 2007.49    696  1359.8 732.4 202 9382  9180 2.11     4.96 372.78
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: dogbtn
+   vars  n   mean    sd median trimmed   mad min max range skew kurtosis   se
+X1    1 17 336.65 40.06    339  336.07 41.51 268 414   146 0.04     -1.1 9.72
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: pro1
+   vars  n   mean     sd median trimmed    mad min  max range skew kurtosis     se
+X1    1 14 915.21 740.82    495  852.08 416.61 214 2374  2160 0.57    -1.32 197.99
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: pro2
+   vars  n   mean     sd median trimmed    mad min  max range skew kurtosis     se
+X1    1 26 724.85 614.71    409  654.59 207.56 214 2082  1868    1    -0.74 120.56
+---------------------------------------------------------------------------------------------------------------------
+data$boxname: pro3
+   vars  n    mean      sd median trimmed     mad min  max range skew kurtosis     se
+X1    1 33 2005.61 1862.72   1484  1779.7 1700.54 225 6456  6231 0.89    -0.49 324.26
+>
+>
+> ## Inferential Stats
+> data <- subset(data,event == "mouseout");
+> data$boxtime.c <- data$boxtime - mean(data$boxtime);
+> data$boxtime.c.scaled <- data$boxtime.c / 1000;
+>
+> ## Does the time spent viewing a box predict which choice the person will make?
+> fit <- glmer(mlchoice=="catbtn" ~ (1|id) + boxtime.c.scaled%in%boxname,data=data,family=binomial);
+> summary(fit);
+Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+ Family: binomial  ( logit )
+Formula: mlchoice == "catbtn" ~ (1 | id) + boxtime.c.scaled %in% boxname
+   Data: data
+
+     AIC      BIC   logLik deviance df.resid
+    58.7     83.2    -21.4     42.7      150
+
+Scaled residuals:
+      Min        1Q    Median        3Q       Max
+-0.076399 -0.017674 -0.011366  0.001674  0.020061
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ id     (Intercept) 3193     56.51
+Number of obs: 158, groups:  id, 34
+
+Fixed effects:
+                             Estimate Std. Error z value Pr(>|z|)
+(Intercept)                  12.59684    2.81698   4.472 7.76e-06 ***
+boxtime.c.scaled:boxnamecon1  0.03926    2.96488   0.013 0.989436
+boxtime.c.scaled:boxnamecon2 -0.82020    5.67681  -0.144 0.885119
+boxtime.c.scaled:boxnamecon3 -2.79788    0.81766  -3.422 0.000622 ***
+boxtime.c.scaled:boxnamepro1 -0.15245    7.27334  -0.021 0.983278
+boxtime.c.scaled:boxnamepro2 -0.50999    5.37751  -0.095 0.924443
+boxtime.c.scaled:boxnamepro3 -0.14406    1.17670  -0.122 0.902559
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+                   (Intr) bxtm.c.scld:bxnmc1 bxtm.c.scld:bxnmc2 bxtm.c.scld:bxnmc3 bxtm.c.scld:bxnmp1 bxtm.c.scld:bxnmp2
+bxtm.c.scld:bxnmc1 -0.035
+bxtm.c.scld:bxnmc2  0.009  0.049
+bxtm.c.scld:bxnmc3 -0.562  0.022              0.019
+bxtm.c.scld:bxnmp1  0.030  0.027              0.064              0.001
+bxtm.c.scld:bxnmp2  0.078  0.028              0.086             -0.005              0.062
+bxtm.c.scld:bxnmp3 -0.266  0.015             -0.002              0.118             -0.006             -0.030
+>
+> ## Do people open certain boxes later than others?
+> fit2 <- lmer(relcount ~ (1|id) + boxname,data=data);
+boundary (singular) fit: see ?isSingular
+> summary(fit2);
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: relcount ~ (1 | id) + boxname
+   Data: data
+
+REML criterion at convergence: 17.9
+
+Scaled residuals:
+     Min       1Q   Median       3Q      Max
+-2.34203 -0.80589 -0.00598  0.83246  2.26925
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ id       (Intercept) 0.00000  0.0000
+ Residual             0.05797  0.2408
+Number of obs: 158, groups:  id, 34
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)
+(Intercept)   0.41518    0.04550 152.00000   9.125 4.11e-16 ***
+boxnamecon2   0.03018    0.06435 152.00000   0.469  0.63969
+boxnamecon3   0.13347    0.06379 152.00000   2.092  0.03807 *
+boxnamepro1   0.05714    0.07881 152.00000   0.725  0.46953
+boxnamepro2   0.06059    0.06557 152.00000   0.924  0.35699
+boxnamepro3   0.18717    0.06186 152.00000   3.026  0.00291 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) bxnmc2 bxnmc3 bxnmp1 bxnmp2
+boxnamecon2 -0.707
+boxnamecon3 -0.713  0.504
+boxnamepro1 -0.577  0.408  0.412
+boxnamepro2 -0.694  0.491  0.495  0.401
+boxnamepro3 -0.736  0.520  0.525  0.425  0.510
+convergence code: 0
+boundary (singular) fit: see ?isSingular
+
+> ?isSingular
+>
+> fit2 <- lm(relcount ~ boxname,data=data);
+> summary(fit2);
+
+Call:
+lm(formula = relcount ~ boxname, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-0.56388 -0.19403 -0.00144  0.20043  0.54636
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.41518    0.04550   9.125 4.11e-16 ***
+boxnamecon2  0.03018    0.06435   0.469  0.63969
+boxnamecon3  0.13347    0.06379   2.092  0.03807 *
+boxnamepro1  0.05714    0.07881   0.725  0.46953
+boxnamepro2  0.06059    0.06557   0.924  0.35699
+boxnamepro3  0.18717    0.06186   3.026  0.00291 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2408 on 152 degrees of freedom
+Multiple R-squared:  0.07605,	Adjusted R-squared:  0.04565
+F-statistic: 2.502 on 5 and 152 DF,  p-value: 0.03292
+
+>
+> ## Do cat lovers avoid looking at anti-cat information?
+> data$hit <- 1;
+> data_wide <- dcast(data,id + choice ~ boxname, value.var="hit");
+Aggregation function missing: defaulting to length
+> fit3 <- lm(choice=="catbtn" ~ con1 + con2 + con3 + pro1 + pro2 + pro3, data=data_wide);
+> summary(fit3);
+
+Call:
+lm(formula = choice == "catbtn" ~ con1 + con2 + con3 + pro1 +
+    pro2 + pro3, data = data_wide)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-0.90818 -0.31927  0.09182  0.15694  0.74943
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)   0.6460     0.1634   3.954   0.0005 ***
+con1          0.1265     0.2282   0.554   0.5840
+con2         -0.1407     0.1881  -0.748   0.4611
+con3         -0.3125     0.1758  -1.777   0.0868 .
+pro1         -0.3159     0.3025  -1.044   0.3056
+pro2          0.1257     0.1985   0.633   0.5322
+pro3          0.2622     0.1495   1.754   0.0907 .
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4425 on 27 degrees of freedom
+Multiple R-squared:  0.358,	Adjusted R-squared:  0.2153
+F-statistic: 2.509 on 6 and 27 DF,  p-value: 0.04637

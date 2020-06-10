@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583439854322.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1887000654",
+    "id" : "5D3D7786",
+    "lastKnownWriteTime" : 1583443393,
+    "last_content_update" : 1583443393294,
+    "path" : "O:/OneDrive/Documents/Writing/PR4/Chapter 4 Code/PR4MLWeb/analyze_data.r",
+    "project_path" : "analyze_data.r",
+    "properties" : {
+        "cursorPosition" : "8,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

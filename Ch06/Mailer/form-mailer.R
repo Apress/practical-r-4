@@ -1,0 +1,31 @@
+# Sending Bulk Mail, portions adapted from https://blog.mailtrap.io/r-send-email/#Bulk_emails_with_gmailR
+
+library("gmailr");
+library("dplyr");
+library("purrr");
+gm_auth_configure(path="client_secret.json");
+form_data <- read.csv("form-mail.csv");
+
+## Calculate commissions
+form_data$commission <- form_data$commission.rate * form_data$gross.sales;
+
+##
+msg_from <- "Jon Westfall <doctorwestfall@gmail.com>"
+body <- "Hi, %s. Your commission for this week is %s."
+
+# Uses the mutate() function from dplyr to insert the correct variables.
+sending_data <- form_data %>%
+  mutate(
+    To = sprintf('%s <%s>', paste(firstname, lastname), email_address),
+    From = msg_from,
+    Subject = sprintf('Sales Commission for %s', firstname),
+    body = sprintf(body, firstname, commission)) %>%
+    select(To, From, Subject, body)
+
+# Use the pmap() function and safely function from "purrr" package.
+emails <- sending_data %>%
+  pmap(mime)
+
+send_message_safe <- safely(send_message)
+sent_mail <- emails %>%
+  map(send_message_safe)

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1586545040670.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4B3D07BE",
+    "lastKnownWriteTime" : 8391166443839430692,
+    "last_content_update" : 1586545040670,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "id" : "4983953544614ae985e7d54ac0311b4a",
+        "name" : "top.df",
+        "title" : "top.df"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "object_explorer"
+}

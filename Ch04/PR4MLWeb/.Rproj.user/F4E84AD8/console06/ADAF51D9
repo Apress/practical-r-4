@@ -1,0 +1,5 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+]0;~/OneDrive/Documents/Writing/PR4/Chapter 4 Code/PR4MLWeb[?1034hJonathans-MacBook-Pro:PR4MLWeb jon$ [KJonathans-MacBook-Pro:PR4MLWeb jon$ 
